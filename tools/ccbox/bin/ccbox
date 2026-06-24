@@ -112,8 +112,8 @@ ccbox_uninstall() {
   fi
 
   echo
-  echo "Runtime teardown done. To remove the program files:"
-  echo "  sudo apt remove ccbox      # or: sudo apt purge ccbox"
+  echo "Runtime teardown done. To remove the ccbox command from cctools:"
+  echo "  cctools disable ccbox"
 }
 
 # ---- subcommand dispatch (reserved first words; everything else launches) ----

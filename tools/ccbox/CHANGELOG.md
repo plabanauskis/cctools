@@ -8,3 +8,5 @@ All notable changes to ccbox are documented here. Versions follow [semver](https
   own `claude` binary read-only inside a sysbox container. The `.deb` packaging
   channel is dropped in favour of the bundle installer + `cctools enable ccbox`.
   Versioning moves to this file (`ccbox version` still reads `CCBOX_VERSION`).
+- The `ccbox uninstall` teardown message now points at `cctools disable ccbox`
+  instead of `apt remove` (the `.deb` channel is gone).

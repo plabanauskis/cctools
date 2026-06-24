@@ -14,8 +14,8 @@
 </p>
 
 <p>
-  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-555"></a>
-  <a href="https://github.com/plabanauskis/ccbox/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/plabanauskis/ccbox?color=D97757"></a>
+  <a href="../../LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-555"></a>
+  <a href="https://github.com/plabanauskis/cctools/releases"><img alt="Latest release: 2.0.1" src="https://img.shields.io/badge/release-2.0.1-D97757"></a>
   <img alt="Platform: Linux · amd64" src="https://img.shields.io/badge/platform-Linux%20%C2%B7%20amd64-555">
   <img alt="Built for Claude Code" src="https://img.shields.io/badge/built%20for-Claude%20Code-D97757">
 </p>
