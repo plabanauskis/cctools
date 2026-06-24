@@ -43,16 +43,16 @@ grep -q "## 1.0.0 — 2026-06-24" "$CCTOOLS_HOME/tools/cchat/CHANGELOG.md" && ok
 
 # ---- ccbox CCBOX_VERSION sync ----
 mkdir -p "$CCTOOLS_HOME/tools/ccbox/bin"
-printf '#!/usr/bin/env bash\nCCBOX_VERSION="2.0.0"\n' >"$CCTOOLS_HOME/tools/ccbox/bin/ccbox"
-echo "2.0.0" >"$CCTOOLS_HOME/tools/ccbox/VERSION"
-printf '# Changelog — ccbox\n\n## 2.0.0 — 2026-06-24\n\n- Initial.\n' \
+printf '#!/usr/bin/env bash\nCCBOX_VERSION="1.0.0"\n' >"$CCTOOLS_HOME/tools/ccbox/bin/ccbox"
+echo "1.0.0" >"$CCTOOLS_HOME/tools/ccbox/VERSION"
+printf '# Changelog — ccbox\n\n## 1.0.0 — 2026-06-24\n\n- Initial.\n' \
   >"$CCTOOLS_HOME/tools/ccbox/CHANGELOG.md"
 
-bump_version ccbox 2.1.0
-assert_eq "$(cat "$CCTOOLS_HOME/tools/ccbox/VERSION")" "2.1.0" \
+bump_version ccbox 1.1.0
+assert_eq "$(cat "$CCTOOLS_HOME/tools/ccbox/VERSION")" "1.1.0" \
   "bump_version ccbox: writes VERSION"
 # shellcheck disable=SC2015  # ok() always succeeds; bad() only runs when grep fails
-grep -q 'CCBOX_VERSION="2.1.0"' "$CCTOOLS_HOME/tools/ccbox/bin/ccbox" &&
+grep -q 'CCBOX_VERSION="1.1.0"' "$CCTOOLS_HOME/tools/ccbox/bin/ccbox" &&
   ok || bad "bump_version ccbox: updates CCBOX_VERSION in bin/ccbox"
 
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"

@@ -58,7 +58,7 @@ assert_eq "$(PATH=/nonexistent missing_deps)" "fzf jq claude" "missing_deps: lis
 
 # tool_version reads the VERSION file
 assert_eq "$(tool_version cchat)" "1.0.0" "tool_version: cchat"
-assert_eq "$(tool_version ccbox)" "2.0.1" "tool_version: ccbox"
+assert_eq "$(tool_version ccbox)" "1.0.0" "tool_version: ccbox"
 
 # enable -> symlink created, tool_enabled true; disable -> removed
 enable_tool cchat >/dev/null
@@ -71,7 +71,7 @@ assert_eq "$([ -e "$CCTOOLS_BIN/cchat" ] && echo y || echo n)" "n" "disable_tool
 
 # cmd_list / cmd_version surface the tools
 assert_contains "$(cmd_list)" "cchat" "cmd_list: shows cchat"
-assert_contains "$(cmd_version ccbox)" "ccbox 2.0.1" "cmd_version: prints tool + version"
+assert_contains "$(cmd_version ccbox)" "ccbox 1.0.0" "cmd_version: prints tool + version"
 
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]
