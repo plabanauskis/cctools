@@ -32,6 +32,12 @@ assert_eq() { # <got> <want> <msg>
     printf 'FAIL: %s\n  got:  [%s]\n  want: [%s]\n' "$3" "$1" "$2"
   fi
 }
+assert_nonzero() { # <rc> <msg>
+  if [ "$1" -ne 0 ]; then PASS=$((PASS + 1)); else
+    FAIL=$((FAIL + 1))
+    printf 'FAIL: %s\n  expected non-zero exit, got 0\n' "$2"
+  fi
+}
 
 SANDBOX="$(mktemp -d)"
 trap 'rm -rf "$SANDBOX"' EXIT
@@ -61,6 +67,31 @@ assert_contains "$out" "from $CCBOX_DIR" "build via symlink: resolves to the rea
 out_direct="$(run_build "$CCBOX")"; rc_direct=$?
 assert_eq "$rc_direct" "0" "build run directly: exits 0 (Dockerfile resolved)"
 refute_contains "$out_direct" "cannot find Dockerfile" "build run directly: no resolution error"
+
+# --- launch gate: non-git dir warns + aborts unattended; git dir proceeds (no warning) ---
+# Exercises the path that replaced the old hard "not inside a git repository" abort. Run under
+# setsid so there is no controlling TTY: the launcher's `read … </dev/tty || ans=n` then
+# deterministically defaults to abort instead of blocking on input.
+if command -v setsid >/dev/null 2>&1; then
+  # non-git: a fresh temp dir (and its parents) are not a git repo.
+  NOGIT="$(mktemp -d)"
+  out_nogit="$(cd "$NOGIT" && setsid -w env PATH="$BIN:$PATH" "$BIN/ccbox" 2>&1)"; rc_nogit=$?
+  rm -rf "$NOGIT"
+  assert_contains "$out_nogit" "is not a git repository" "non-git: warns it is not a git repo"
+  assert_contains "$out_nogit" "NO undo" "non-git: warns the agent's edits have no undo"
+  assert_nonzero "$rc_nogit" "non-git: aborts when unattended (no TTY -> default no)"
+  refute_contains "$out_nogit" "sysbox" "non-git: stops at the prompt, never reaches the sysbox check"
+
+  # git repo: gate passes, launch proceeds to the existing sysbox check (stub docker lacks it).
+  GITDIR="$(mktemp -d)"
+  git -C "$GITDIR" init -q
+  out_git="$(cd "$GITDIR" && setsid -w env PATH="$BIN:$PATH" "$BIN/ccbox" 2>&1)"
+  rm -rf "$GITDIR"
+  refute_contains "$out_git" "is not a git repository" "git repo: no non-git warning"
+  assert_contains "$out_git" "sysbox runtime not found" "git repo: proceeds to the sysbox check as before"
+else
+  printf 'SKIP: setsid unavailable — launch-gate tty tests skipped\n'
+fi
 
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]

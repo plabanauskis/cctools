@@ -22,11 +22,12 @@
 
 </div>
 
-One command, run from inside any git repository, drops you into the normal interactive
-Claude Code **terminal chat** running inside a Docker container with
-`--dangerously-skip-permissions`. The agent works fully autonomously (no per-action prompts)
-on your repo, can run the repo's own `docker compose` stack and test suite, and **cannot make
-system-wide changes that damage the host OS**.
+One command drops you into the normal interactive Claude Code **terminal chat** running inside
+a Docker container with `--dangerously-skip-permissions`. Run it from a git repository (it
+mounts the repo root), or from any other directory after a one-time warning — outside a repo
+there's no git history to undo the agent's edits. The agent works fully autonomously (no
+per-action prompts) on your project, can run its own `docker compose` stack and test suite, and
+**cannot make system-wide changes that damage the host OS**.
 
 The box is a **path-identical mirror** of your environment: it runs as *you*, at your real
 `$HOME`, with the repo at its real path, your `~/.claude` mounted read-write, and your host
@@ -140,7 +141,8 @@ remove the now-unused `~/.config/ccbox` GitHub App config.)
 
 ## Usage
 
-From inside any git repository:
+From inside a git repository (or any other directory — you'll be warned first, since there's
+no git history to undo the agent's edits there):
 
 ```bash
 cd ~/code/my-project
@@ -193,7 +195,7 @@ in your host browser.
 | `ccbox: sysbox runtime not found` | Install sysbox-ce (Prereq C); verify with `docker info -f '{{.Runtimes}}'`. |
 | `docker` / `docker compose` "cannot connect" right after launch | The inner daemon is still starting — wait (see Usage). |
 | In-box web app unreachable from host browser | The service must bind `0.0.0.0` and its port must be published (see Ports). |
-| `ccbox: not inside a git repository` | Run `ccbox` from within a git repo (it bind-mounts the repo root). |
+| `ccbox` warns the directory is not a git repository | Expected outside a repo: there's no git history to undo the agent's edits. Press `y` to continue (the whole dir is mounted read-write), or `cd` into a git repo. |
 
 ---
 

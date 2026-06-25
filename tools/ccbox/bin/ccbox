@@ -16,7 +16,7 @@ ccbox_usage() {
 ccbox $CCBOX_VERSION — sandboxed autonomous Claude Code
 
 Usage:
-  ccbox [claude args...]   Launch the sandbox in the current git repo (default)
+  ccbox [claude args...]   Launch the sandbox in the current dir (git repo, or any dir w/ warning)
   ccbox build              Build/rebuild the image ($IMAGE) for your user
   ccbox doctor             Check prerequisites and configuration
   ccbox uninstall          Remove image + caches; prompt before data
@@ -145,10 +145,25 @@ case "${1:-}" in
 esac
 
 # ---- launch path ----
-repo_root="$(git rev-parse --show-toplevel 2>/dev/null)" || {
-  echo "ccbox: not inside a git repository" >&2
-  exit 1
-}
+# Prefer the git repo root (so launching from any subdir mounts the whole repo). Outside a
+# repo we can still run, but git history is the agent's only undo for its in-scope edits — so
+# warn and confirm before mounting the current directory. No controlling TTY (autonomous run)
+# defaults to abort, matching the build/uninstall prompts.
+if repo_root="$(git rev-parse --show-toplevel 2>/dev/null)"; then
+  :
+else
+  repo_root="$(pwd -P)"
+  echo "ccbox: '$repo_root' is not a git repository." >&2
+  echo "ccbox: the agent runs autonomously with permissions skipped; without git history its" >&2
+  echo "ccbox: edits and deletions have NO undo. The whole directory is mounted read-write." >&2
+  printf 'Continue anyway? [y/N] ' >&2
+  read -r ans </dev/tty 2>/dev/null || ans=n
+  case "$ans" in y | Y) ;; *)
+    echo "ccbox: aborted." >&2
+    exit 1
+    ;;
+  esac
+fi
 
 docker info -f '{{.Runtimes}}' 2>/dev/null | grep -q sysbox-runc || {
   echo "ccbox: sysbox runtime not found. Install sysbox-ce (README Prerequisite C)." >&2

@@ -2,6 +2,13 @@
 
 All notable changes to ccbox are documented here. Versions follow [semver](https://semver.org).
 
+## Unreleased
+
+- `ccbox` no longer hard-errors outside a git repository. It now warns that there's
+  no git history to undo the agent's edits and prompts before launching, mounting the
+  current directory. A non-interactive launch (no controlling TTY) defaults to abort.
+  Inside a git repo the behaviour is unchanged (mounts the repo root, no prompt).
+
 ## 1.0.0 — 2026-06-24
 
 - Initial release in the cctools bundle (fresh `1.0.0` baseline alongside cchat
