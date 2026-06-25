@@ -50,6 +50,8 @@ assert_contains "$PLATFORM" "linux" "load_manifest: PLATFORM"
 # platform_ok: ccbox is linux-only -> ok here; (no macos-only tool to test the negative)
 load_manifest ccbox
 assert_eq "$(platform_ok && echo y || echo n)" "y" "platform_ok: ccbox supported on linux"
+# ccbox needs the sysbox runtime, not just docker — it must be a declared dep
+assert_contains "$DEPS" "sysbox-runc" "load_manifest: ccbox DEPS includes sysbox-runc"
 
 # missing_deps: empty when deps present (fake PATH), names the gap when not
 load_manifest ccsession
