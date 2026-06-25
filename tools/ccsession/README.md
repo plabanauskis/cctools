@@ -1,4 +1,26 @@
-# ccsession
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+  <img src="assets/logo.svg" alt="ccsession" width="400">
+</picture>
+
+<p><strong>Find and resume any Claude Code session — no <code>cd</code> required.</strong></p>
+
+<p>
+  Every Claude Code session, newest-active first, in one <code>fzf</code> picker — status, time,
+  directory, branch, and summary at a glance. Press Enter and it drops into the session's own
+  directory and resumes it for you.
+</p>
+
+<p>
+  <a href="../../LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-555"></a>
+  <a href="https://github.com/plabanauskis/cctools/releases"><img alt="Latest release: 1.0.0" src="https://img.shields.io/badge/release-1.0.0-D97757"></a>
+  <img alt="Platform: Linux · macOS" src="https://img.shields.io/badge/platform-Linux%20%C2%B7%20macOS-555">
+  <img alt="Built for Claude Code" src="https://img.shields.io/badge/built%20for-Claude%20Code-D97757">
+</p>
+
+</div>
 
 List every Claude Code session in an [`fzf`](https://github.com/junegunn/fzf)
 picker and resume any one of them without first navigating to its directory.

@@ -1,4 +1,24 @@
+<div align="center">
+
+<p>
+  <picture><source media="(prefers-color-scheme: dark)" srcset="tools/cchat/assets/icon-dark.svg"><img src="tools/cchat/assets/icon.svg" alt="cchat" height="56"></picture>
+  &nbsp;&nbsp;&nbsp;
+  <picture><source media="(prefers-color-scheme: dark)" srcset="tools/ccsession/assets/icon-dark.svg"><img src="tools/ccsession/assets/icon.svg" alt="ccsession" height="56"></picture>
+  &nbsp;&nbsp;&nbsp;
+  <picture><source media="(prefers-color-scheme: dark)" srcset="tools/ccbox/assets/icon-dark.svg"><img src="tools/ccbox/assets/icon.svg" alt="ccbox" height="56"></picture>
+</p>
+
 # cctools
+
+<p><strong>Three small, sharp Claude Code helpers for the terminal — one installer, install only what you want.</strong></p>
+
+<p>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-555"></a>
+  <img alt="Built for Claude Code" src="https://img.shields.io/badge/built%20for-Claude%20Code-D97757">
+  <img alt="Install: no sudo · no daemons" src="https://img.shields.io/badge/install-no%20sudo%20%C2%B7%20no%20daemons-555">
+</p>
+
+</div>
 
 Three small, sharp helpers for working with [Claude Code](https://claude.com/claude-code)
 in the Linux/macOS terminal — bundled behind one installer and a tiny management
@@ -6,9 +26,9 @@ command. Install only what you want; uninstall leaves your machine exactly as it
 
 | Tool | What it does | Deps | Platform |
 |------|--------------|------|----------|
-| **cchat** | Opens Claude Code in a fresh ephemeral `/tmp` dir for throwaway chats | `claude` | linux, macos |
-| **ccsession** | `fzf` picker to list and resume any Claude Code session without `cd`-ing | `fzf`, `jq`, `claude` | linux, macos |
-| **ccbox** | Sandboxed autonomous Claude Code via Docker + sysbox (path-identical host mirror) | `docker`, `sysbox-ce`, `claude` | linux (amd64) |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="tools/cchat/assets/icon-dark.svg"><img src="tools/cchat/assets/icon.svg" alt="" width="20"></picture> **cchat** | Opens Claude Code in a fresh ephemeral `/tmp` dir for throwaway chats | `claude` | linux, macos |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="tools/ccsession/assets/icon-dark.svg"><img src="tools/ccsession/assets/icon.svg" alt="" width="20"></picture> **ccsession** | `fzf` picker to list and resume any Claude Code session without `cd`-ing | `fzf`, `jq`, `claude` | linux, macos |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="tools/ccbox/assets/icon-dark.svg"><img src="tools/ccbox/assets/icon.svg" alt="" width="20"></picture> **ccbox** | Sandboxed autonomous Claude Code via Docker + sysbox (path-identical host mirror) | `docker`, `sysbox-ce`, `claude` | linux (amd64) |
 
 cchat and ccsession are featherweight and portable; ccbox is heavy (a ~5 GB Docker
 image) and Linux-only. The installer is dep-aware and opt-in, so wanting `ccsession`
