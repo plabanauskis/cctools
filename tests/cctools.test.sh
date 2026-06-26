@@ -60,7 +60,7 @@ assert_eq "$(PATH=/nonexistent missing_deps)" "fzf jq claude" "missing_deps: lis
 
 # tool_version reads the VERSION file
 assert_eq "$(tool_version cchat)" "1.0.0" "tool_version: cchat"
-assert_eq "$(tool_version ccbox)" "1.0.0" "tool_version: ccbox"
+assert_eq "$(tool_version ccbox)" "1.1.0" "tool_version: ccbox"
 
 # enable -> symlink created, tool_enabled true; disable -> removed
 enable_tool cchat >/dev/null
@@ -73,7 +73,7 @@ assert_eq "$([ -e "$CCTOOLS_BIN/cchat" ] && echo y || echo n)" "n" "disable_tool
 
 # cmd_list / cmd_version surface the tools
 assert_contains "$(cmd_list)" "cchat" "cmd_list: shows cchat"
-assert_contains "$(cmd_version ccbox)" "ccbox 1.0.0" "cmd_version: prints tool + version"
+assert_contains "$(cmd_version ccbox)" "ccbox 1.1.0" "cmd_version: prints tool + version"
 
 # --- update_prefix: force-push-proof mirror sync (the 'cctools update' git path) ---
 # Build a throwaway bare "remote" + a clone of it (our managed mirror), then rewrite the

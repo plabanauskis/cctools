@@ -2,7 +2,7 @@
 
 All notable changes to ccbox are documented here. Versions follow [semver](https://semver.org).
 
-## Unreleased
+## 1.1.0 — 2026-06-26
 
 - `ccbox` no longer hard-errors outside a git repository. It now warns that there's
   no git history to undo the agent's edits and prompts before launching, mounting the

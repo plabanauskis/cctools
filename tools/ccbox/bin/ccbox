@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CCBOX_VERSION="1.0.0"
+CCBOX_VERSION="1.1.0"
 IMAGE="${CCBOX_IMAGE:-ccbox:latest}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ccbox" # legacy (ccbox 1.x GitHub App); only used by uninstall
 # readlink -f so we find the bundle even when invoked through the ~/.local/bin symlink.
