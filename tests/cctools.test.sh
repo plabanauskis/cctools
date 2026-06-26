@@ -75,5 +75,41 @@ assert_eq "$([ -e "$CCTOOLS_BIN/cchat" ] && echo y || echo n)" "n" "disable_tool
 assert_contains "$(cmd_list)" "cchat" "cmd_list: shows cchat"
 assert_contains "$(cmd_version ccbox)" "ccbox 1.0.0" "cmd_version: prints tool + version"
 
+# --- update_prefix: force-push-proof mirror sync (the 'cctools update' git path) ---
+# Build a throwaway bare "remote" + a clone of it (our managed mirror), then rewrite the
+# remote's history (a force-push) so the clone diverges — a plain 'git pull --ff-only' aborts
+# here, but a mirror has no local work to preserve, so update_prefix should reset it.
+GEX="$SANDBOX/gitex"
+REMOTE="$GEX/remote.git"
+SEED="$GEX/seed"
+CLONE="$GEX/clone"
+mkdir -p "$GEX"
+git init -q --bare -b main "$REMOTE"
+git init -q -b main "$SEED"
+git -C "$SEED" config user.email t@t
+git -C "$SEED" config user.name t
+printf 'v1\n' >"$SEED/f"
+git -C "$SEED" add f
+git -C "$SEED" commit -q -m c1
+git -C "$SEED" remote add origin "$REMOTE"
+git -C "$SEED" push -q -u origin main
+git clone -q "$REMOTE" "$CLONE"
+# Rewrite the remote's only commit (different content + message) and force-push it.
+printf 'v2\n' >"$SEED/f"
+git -C "$SEED" add f
+git -C "$SEED" commit -q --amend -m c1b
+git -C "$SEED" push -q -f origin main
+NEW="$(git -C "$SEED" rev-parse HEAD)"
+update_prefix "$CLONE" >/dev/null 2>&1
+assert_eq "$(git -C "$CLONE" rev-parse HEAD)" "$NEW" "update_prefix: syncs a mirror across a force-push"
+
+# A mirror with uncommitted local edits is left untouched (refuses to discard them).
+printf 'local\n' >>"$CLONE/f"
+H0="$(git -C "$CLONE" rev-parse HEAD)"
+update_prefix "$CLONE" >/dev/null 2>&1
+rc=$?
+assert_eq "$rc" "1" "update_prefix: refuses when the mirror has local edits"
+assert_eq "$(git -C "$CLONE" rev-parse HEAD)" "$H0" "update_prefix: dirty tree leaves HEAD unchanged"
+
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]

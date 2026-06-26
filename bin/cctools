@@ -115,13 +115,32 @@ cmd_doctor() {
   return "$rc"
 }
 
+# Sync a managed mirror to its upstream, tolerant of force-pushed (rewritten) history. The
+# prefix is a checkout we own — never a place for local commits — so when a fast-forward
+# isn't possible (e.g. main was force-pushed) we reset to the upstream rather than abort the
+# way 'git pull --ff-only' would. We still refuse to discard uncommitted edits to tracked
+# files; untracked files survive a reset and are left untouched.
+update_prefix() { # <dir>
+  local dir="$1" upstream
+  git -C "$dir" fetch --prune || return 1
+  upstream="$(git -C "$dir" rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null)" || {
+    echo "cctools: no upstream branch configured in $dir" >&2
+    return 1
+  }
+  if ! git -C "$dir" diff --quiet || ! git -C "$dir" diff --cached --quiet; then
+    echo "cctools: local changes in $dir — refusing to overwrite. Remove them and retry." >&2
+    return 1
+  fi
+  git -C "$dir" reset --hard "$upstream"
+}
+
 cmd_update() {
   command -v git >/dev/null 2>&1 || {
     echo "cctools: git not found" >&2
     return 1
   }
   echo "cctools: updating $ROOT"
-  git -C "$ROOT" pull --ff-only
+  update_prefix "$ROOT" || return 1
   local t
   for t in $(list_tools); do
     load_manifest "$t"
